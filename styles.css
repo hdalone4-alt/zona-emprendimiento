@@ -1,0 +1,235 @@
+:root {
+  --navy: #0d2b3e;
+  --teal: #13867f;
+  --agua: #d9efec;
+  --fondo: #f4f8f8;
+  --linea: #b9d3d0;
+  --texto: #1b2f3a;
+  --suave: #5d7480;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Archivo", system-ui, sans-serif;
+  color: var(--texto);
+  background:
+  linear-gradient(rgba(244, 248, 248, 0.85), rgba(244, 248, 248, 0.85)),
+  url("img/ZonaEmprendimiento.png") center / cover fixed no-repeat;
+  background-color: var(--fondo);
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Título ---------- */
+.titulo { text-align: center; padding: 28px 16px 8px; }
+.titulo h1 { margin: 0; line-height: 1; }
+.zona {
+  display: block;
+  font-family: "Archivo Black", Impact, sans-serif;
+  font-size: clamp(3.5rem, 11vw, 7rem);
+  letter-spacing: 0.04em;
+  color: var(--agua);
+  -webkit-text-stroke: 3px var(--navy);
+  text-shadow: 5px 5px 0 var(--teal);
+}
+.emprendimiento {
+  display: block;
+  margin-top: 10px;
+  font-family: "Archivo Black", Impact, sans-serif;
+  font-size: clamp(1rem, 3.6vw, 2.2rem);
+  letter-spacing: 0.3em;
+  color: var(--navy);
+}
+
+/* ---------- Cuerpo ---------- */
+.cuerpo {
+  display: grid;
+  grid-template-columns: minmax(280px, 400px) 1fr;
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  align-items: start;
+}
+
+/* ---------- Lista ---------- */
+.buscador input {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+  background: #fff;
+}
+.buscador input:focus-visible,
+.item-btn:focus-visible,
+.mod:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.lista {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  border-top: 1px solid var(--linea);
+}
+.item { border-bottom: 1px solid var(--linea); }
+.item[hidden] { display: none; }
+
+.item-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 6px;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.item-btn:hover { background: var(--agua); }
+.item-btn .mods { font-weight: 400; font-size: 0.82rem; color: var(--suave); white-space: nowrap; }
+.item.abierto .item-btn { background: var(--navy); color: #fff; }
+.item.abierto .item-btn .mods { color: #cfe3e0; }
+
+.detalle {
+  display: grid;
+  grid-template-rows: 0fr;              /* cerrado: altura 0 */
+  background: #fff;
+  transition: grid-template-rows 0.5s ease;
+}
+.item.abierto .detalle { grid-template-rows: 1fr; }   /* abierto: altura real */
+.detalle-int { overflow: hidden; min-height: 0; }
+.detalle-pad { padding: 12px 8px 16px; }
+.detalle h3 { margin: 12px 0 4px; font-size: 0.95rem; color: var(--teal); }
+.detalle p { margin: 0; line-height: 1.5; }
+.detalle .tel { font-weight: 700; }
+.productos { list-style: none; margin: 0; padding: 0; }
+.productos li { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; border-bottom: 1px dotted var(--linea); }
+.pendiente { color: var(--suave); font-style: italic; }
+.sin-resultados { margin: 14px 0 0; color: var(--suave); }
+
+/* ---------- Mapa ---------- */
+/* Plano: bloque izquierdo | pasillo central | bloque derecho */
+.plano {
+  display: grid;
+  grid-template-columns: 1fr 96px 1fr;
+  gap: 22px 0;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* Señales (Cafeta Pequeña, Parqueadero, Ciénaga Grande, Bienestar) */
+.ref {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--navy);
+}
+.flecha { font-size: 1.6rem; line-height: 1; }
+
+/* Pasillo central: arriba va Cafeta Pequeña, abajo va Bienestar */
+.corredor { display: flex; flex-direction: column; justify-content: center; padding: 0 6px; }
+.corredor.arriba { justify-content: flex-start; }
+.corredor.abajo { justify-content: flex-end; }
+
+/* Fila entre los bloques 2 y 3: Parqueadero a la izquierda, Ciénaga Grande a la derecha */
+.fila-ref {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fila-ref .ref { flex-direction: row; gap: 8px; }
+.bloque {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 2px solid var(--navy);
+  background: var(--navy);
+  gap: 2px;
+}
+
+.mod {
+  min-height: 42px;
+  padding: 0;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+}
+.mod.ocupado { background: var(--agua); color: var(--navy); }
+.mod.ocupado:hover { background: #b6e0db; }
+.mod.vacio {
+  background: repeating-linear-gradient(45deg, #e6ecee, #e6ecee 6px, #d5dee1 6px, #d5dee1 12px);
+  color: var(--suave);
+  cursor: default;
+}
+.mod.atenuado { opacity: 0.3; }
+
+/* El cubículo seleccionado se pone en negro */
+.mod.sel { background: #000; color: #fff; opacity: 1; }
+
+/* ---------- Pantallas pequeñas ---------- */
+@media (max-width: 800px) {
+  .cuerpo { grid-template-columns: 1fr; }
+  .lista { max-height: 50vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
+}
+
+.panel-lista,
+.panel-mapa {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 16px;
+  border-radius: 12px;
+}
+.visor {
+  position: relative;
+  margin-top: 16px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--agua);
+}
+.visor img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* La imagen nueva empieza oculta (altura 0) y baja como una cascada */
+#img-nueva { clip-path: inset(0 0 100% 0); }
+#img-nueva.cae {
+  clip-path: inset(0);
+  transition: clip-path 1.2s ease-in-out;
+}
+
+/* Cascada inversa: la foto se recoge hacia arriba y deja ver el logo */
+#img-nueva.fija { clip-path: inset(0); }
+#img-nueva.sube {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.2s ease-in-out;
+}

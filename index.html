@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zona de Emprendimiento · Unimagdalena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="titulo">
+    <h1>
+      <span class="zona">ZONA</span>
+      <span class="emprendimiento">EMPRENDIMIENTO</span>
+    </h1>
+  </header>
+
+  <main class="cuerpo">
+    <section class="panel-lista" aria-label="Lista de negocios">
+      <label class="buscador">
+        <span class="sr-only">Buscar negocio por nombre</span>
+        <input id="buscar" type="search" placeholder="Búsqueda..." autocomplete="off">
+      </label>
+      <p id="sin-resultados" class="sin-resultados" hidden>No hay negocios con ese nombre.</p>
+      <ul id="lista" class="lista"></ul>
+
+      <div class="visor">
+        <img id="img-base" src="img/ZonaUni.png" alt="Zona de Emprendimiento">
+        <img id="img-nueva" src="" alt="">
+      </div>
+    </section>
+
+    <section class="panel-mapa" aria-label="Mapa de cubículos">
+      <div id="plano" class="plano"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
