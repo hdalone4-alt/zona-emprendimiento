@@ -81,7 +81,18 @@ body {
   overflow-y: auto;
   border-top: 1px solid var(--linea);
 }
-.item { border-bottom: 1px solid var(--linea); }
+.item {
+  display: grid;
+  grid-template-rows: 1fr;              /* visible: altura real */
+  transition: grid-template-rows 0.6s ease, opacity 0.4s ease;
+  transition-delay: calc(min(var(--i, 0), 12) * 35ms);   /* cascada: cada negocio espera un poco más */
+}
+.item-cont {
+  overflow: hidden;
+  min-height: 0;
+  transition: visibility 0s linear 0s;
+}
+.item-cont::after { content: ""; display: block; height: 1px; background: var(--linea); }  /* línea separadora */
 .item[hidden] { display: none; }
 
 .item-btn {
@@ -219,17 +230,30 @@ body {
   height: 100%;
   object-fit: cover;
 }
-
 /* La imagen nueva empieza oculta (altura 0) y baja como una cascada */
 #img-nueva { clip-path: inset(0 0 100% 0); }
 #img-nueva.cae {
   clip-path: inset(0);
   transition: clip-path 1.2s ease-in-out;
 }
-
 /* Cascada inversa: la foto se recoge hacia arriba y deja ver el logo */
 #img-nueva.fija { clip-path: inset(0); }
 #img-nueva.sube {
   clip-path: inset(0 0 100% 0);
   transition: clip-path 1.2s ease-in-out;
+}
+
+/* Con un negocio abierto, se ocultan los demás y la lista se encoge */
+.lista { transition: max-height 0.1s ease; }
+.lista.con-seleccion { max-height: 35vh; }
+.lista.con-seleccion .item:not(.abierto) { grid-template-rows: 0fr; opacity: 0; }   /* se pliegan hasta altura 0 */
+/* Ya plegados, se sacan del teclado (Tab) y de los lectores de pantalla */
+.lista.con-seleccion .item:not(.abierto) .item-cont { visibility: hidden; transition-delay: 0.1s; }
+
+/* El negocio abierto muestra "✕ Ver todos" para saber cómo volver a la lista completa */
+.item.abierto .item-btn .mods { display: none; }
+.item.abierto .item-btn::after {
+  content: "✕ Ver todos";
+  font-size: 0.82rem;
+  font-weight: 400;
 }

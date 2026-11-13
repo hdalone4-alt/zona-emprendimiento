@@ -29,9 +29,25 @@ const DETALLES = {
     telefono: "+57 300 123 4567",
     descripcion: "Texto de ejemplo: aquí va la descripción del negocio.",
     productos: [["Producto de ejemplo 1", "$10.000"], ["Producto de ejemplo 2", "$25.000"]],
-    imagen: "img/prueba.jpg"   // SOLO PARA PROBAR: borra esta línea cuando tengas la foto real
+    imagen: "img/Negocios/Judith_Crochet.JPEG",
+  },
+
+  "Glamour": {
+    imagen: "img/Negocios/Glamour.JPEG",
+  },
+
+  "Matutino": {
+    imagen: "img/Negocios/Matutino.JPEG",
+  },
+
+  "Salume artesanías": {
+    imagen: "img/Negocios/Salume artesanías.JPEG",
   }
+
+
+  
 };
+
 
 /* ==========================================================
    3. CÓDIGO (normalmente no hay que tocarlo)
@@ -65,11 +81,13 @@ function htmlDetalle(n) {
 /* ----- Lista ----- */
 $lista.innerHTML = NEGOCIOS.map(n => `
   <li class="item" data-id="${n.id}">
-    <button class="item-btn" type="button" aria-expanded="false">
-      <span>${escapar(n.nombre)}</span>
-      <span class="mods">${n.mods.length > 1 ? "Cubículos" : "Cubículo"} ${n.mods.join(" y ")}</span>
-    </button>
-    <div class="detalle"><div class="detalle-int"><div class="detalle-pad">${htmlDetalle(n)}</div></div></div>
+    <div class="item-cont">
+      <button class="item-btn" type="button" aria-expanded="false">
+        <span>${escapar(n.nombre)}</span>
+        <span class="mods">${n.mods.length > 1 ? "Cubículos" : "Cubículo"} ${n.mods.join(" y ")}</span>
+      </button>
+      <div class="detalle"><div class="detalle-int"><div class="detalle-pad">${htmlDetalle(n)}</div></div></div>
+    </div>
   </li>`).join("");
 
 /* ----- Mapa: 4 filas de bloques, lado izquierdo (33-64) y derecho (1-32) ----- */
@@ -115,21 +133,28 @@ function seleccionar(id, desdeMapa = false) {
   document.querySelectorAll(".item").forEach(li => {
     const abierto = Number(li.dataset.id) === seleccionado;
     li.classList.toggle("abierto", abierto);
+    // Retraso según la distancia al negocio tocado: los más cercanos se pliegan primero (cascada)
+    li.style.setProperty("--i", Math.abs(Number(li.dataset.id) - id));
     li.querySelector(".item-btn").setAttribute("aria-expanded", abierto);
   });
+  $lista.classList.toggle("con-seleccion", seleccionado !== null);   // oculta los demás negocios mientras uno está abierto
   document.querySelectorAll(".mod").forEach(b => {
     const dueño = negocioPorModulo[b.dataset.mod];
     b.classList.toggle("sel", seleccionado !== null && dueño === seleccionado);
   });
   if (seleccionado !== null) {
-    document.querySelector(`.item[data-id="${seleccionado}"]`).scrollIntoView({ block: "nearest", behavior: "smooth" });
+    // Sube hasta el buscador para que se vean el negocio abierto y la imagen
+    document.querySelector(".panel-lista").scrollIntoView({ block: "start", behavior: "smooth" });
+  } else {
+    // Al cerrar, la lista vuelve a mostrarse completa: se deja a la vista el negocio que estaba abierto
+    document.querySelector(`.item[data-id="${id}"]`).scrollIntoView({ block: "nearest" });
   }
   cambiarImagen(seleccionado !== null ? rutaImagen(NEGOCIOS[seleccionado]) : IMAGEN_BASE);
 }
 
 $lista.addEventListener("click", e => {
   const btn = e.target.closest(".item-btn");
-  if (btn) seleccionar(Number(btn.parentElement.dataset.id));
+  if (btn) seleccionar(Number(btn.closest(".item").dataset.id));
 });
 $plano.addEventListener("click", e => {
   const mod = e.target.closest(".mod.ocupado");
